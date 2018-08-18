@@ -1,19 +1,19 @@
 package main
 
-import (
-	"chenyuanshan/0815HomeWork/blockchain/BLC"
-	"fmt"
-)
+import "chenyuanshan/0817HomeWork/blockchain/BLC"
 
 func main() {
 
-	blockchain := BLC.CreatBlockchainWithGenesisBlockYS()
+	//blockchain := BLC.CreatBlockchainWithGenesisBlockYS()
+	//
+	//blockchain.AddBlockToBlockchainYS("2", blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HeightYS+1, blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HashYS )
+	//blockchain.AddBlockToBlockchainYS("33", blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HeightYS+1, blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HashYS )
+	//blockchain.AddBlockToBlockchainYS("444", blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HeightYS+1, blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HashYS )
+	//blockchain.AddBlockToBlockchainYS("5555", blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HeightYS+1, blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HashYS )
+	//
+	//fmt.Println(blockchain.BlockYSs)
 
-	blockchain.AddBlockToBlockchainYS("2", blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HeightYS+1, blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HashYS )
-	blockchain.AddBlockToBlockchainYS("33", blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HeightYS+1, blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HashYS )
-	blockchain.AddBlockToBlockchainYS("444", blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HeightYS+1, blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HashYS )
-	blockchain.AddBlockToBlockchainYS("5555", blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HeightYS+1, blockchain.BlockYSs[len(blockchain.BlockYSs)-1].HashYS )
-
-	fmt.Println(blockchain.BlockYSs)
+	cli := BLC.CLIYS{}
+	cli.RunYS()
 
 }

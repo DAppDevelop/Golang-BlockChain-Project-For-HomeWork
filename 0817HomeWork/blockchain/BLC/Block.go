@@ -42,6 +42,7 @@ func CreateGenesisBlockYS(data string) *BlockYS {
 	return NewBlockYS(data, 1, make([]byte, 32, 32))
 }
 
+//格式化
 func (block *BlockYS) String() string {
 	return fmt.Sprintf(
 		"\n------------------------------"+
