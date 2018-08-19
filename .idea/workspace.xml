@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f866bbaa-ed92-4e88-8c3c-961e06c15f1b" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/chenyuanshan.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/Block.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/Blockchain.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/BlockchainIterator.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/CLI.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/CLI_createblockchain.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/CLI_getbalance.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/CLI_printchain.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/CLI_send.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/Constant.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/ProofOfWork.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/Transaction.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/Transaction_TXInput.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/Transaction_TXOutput.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/UTXO.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/BLC/utils.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/blockchain.db" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/0819Homework/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/0815HomeWork/blockchain/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/0815HomeWork/blockchain/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/0817HomeWork/blockchain/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/0817HomeWork/blockchain/main.go" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="Blockchain.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/0819Homework/BLC/Blockchain.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="439">
+              <caret line="232" column="31" selection-start-line="232" selection-start-column="25" selection-end-line="232" selection-end-column="31" />
+              <folding>
+                <element signature="n#!!block;n#MineNewBlockYS#0" />
+                <element signature="n#!!block;n#FindSpentableUTXOsYS#0" />
+                <element signature="n#!!block;n#GetBalanceYS#0" />
+                <element signature="n#!!block;n#IteratorYS#0" />
+                <element signature="n#!!block;n#DBExistsYS#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UTXO.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/0819Homework/BLC/UTXO.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ProofOfWork.go" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/0819Homework/BLC/ProofOfWork.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="106">
+              <caret line="33" column="10" selection-start-line="33" selection-start-column="10" selection-end-line="33" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Transaction.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/0819Homework/BLC/Transaction.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Transaction_TXInput.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/0819Homework/BLC/Transaction_TXInput.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="4" lean-forward="true" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Transaction_TXOutput.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/0819Homework/BLC/Transaction_TXOutput.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>targetBitYS</find>
+    </findStrings>
+  </component>
+  <component name="GOROOT" path="/usr/local/Cellar/go/1.10.3/libexec" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/0815Homework/blockchain/main.go" />
+        <option value="$PROJECT_DIR$/0817Homework/blockchain/main.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/utils.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/CLI_createblockchain.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/BlockchainIterator.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/Transaction_TXOutput.go" />
+        <option value="$PROJECT_DIR$/0819Homework/main.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/CLI_send.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/CLI_printchain.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/CLI_getbalance.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/CLI.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/Constant.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/Blockchain.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/Block.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/Transaction_TXInput.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/Transaction.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/UTXO.go" />
+        <option value="$PROJECT_DIR$/0819Homework/BLC/ProofOfWork.go" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="54" />
+    <option name="y" value="23" />
+    <option name="width" value="1464" />
+    <option name="height" value="1027" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="chenyuanshan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chenyuanshan" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chenyuanshan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chenyuanshan" type="462c0819:PsiDirectoryNode" />
+              <item name="0817Homework" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chenyuanshan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chenyuanshan" type="462c0819:PsiDirectoryNode" />
+              <item name="0817Homework" type="462c0819:PsiDirectoryNode" />
+              <item name="blockchain" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chenyuanshan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chenyuanshan" type="462c0819:PsiDirectoryNode" />
+              <item name="0817Homework" type="462c0819:PsiDirectoryNode" />
+              <item name="blockchain" type="462c0819:PsiDirectoryNode" />
+              <item name="BLC" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chenyuanshan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chenyuanshan" type="462c0819:PsiDirectoryNode" />
+              <item name="0819Homework" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chenyuanshan" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chenyuanshan" type="462c0819:PsiDirectoryNode" />
+              <item name="0819Homework" type="462c0819:PsiDirectoryNode" />
+              <item name="BLC" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="go.gopath.indexing.explicitly.defined" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="54" y="23" width="1464" height="1027" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18354431" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" visible="true" weight="0.47311828" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/0815Homework/对比POW，POS，DPOS.md">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0815Homework/blockchain/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+          <folding>
+            <element signature="e#14#75#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0817Homework/blockchain/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="46" selection-start-line="6" selection-start-column="46" selection-end-line="6" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/CLI_send.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="18" column="1" lean-forward="true" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/CLI_createblockchain.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/CLI.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="44" column="65" selection-start-line="44" selection-start-column="65" selection-end-line="44" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/CLI_getbalance.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="13" column="36" selection-start-line="13" selection-start-column="36" selection-end-line="13" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/CLI_printchain.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="13" column="36" selection-start-line="13" selection-start-column="36" selection-end-line="13" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/BlockchainIterator.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="31" column="5" lean-forward="true" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0817Homework/blockchain/BLC/Constant.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="6" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/Block.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="83" column="33" lean-forward="true" selection-start-line="83" selection-start-column="33" selection-end-line="83" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/utils.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="28" column="18" selection-start-line="28" selection-start-column="18" selection-end-line="28" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/Constant.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="34" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0817Homework/blockchain/BLC/Block.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="183">
+          <caret line="41" column="51" lean-forward="true" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/Transaction_TXInput.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="4" lean-forward="true" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/Transaction_TXOutput.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/Transaction.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/Blockchain.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="439">
+          <caret line="232" column="31" selection-start-line="232" selection-start-column="25" selection-end-line="232" selection-end-column="31" />
+          <folding>
+            <element signature="n#!!block;n#MineNewBlockYS#0" />
+            <element signature="n#!!block;n#FindSpentableUTXOsYS#0" />
+            <element signature="n#!!block;n#GetBalanceYS#0" />
+            <element signature="n#!!block;n#IteratorYS#0" />
+            <element signature="n#!!block;n#DBExistsYS#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/UTXO.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/0819Homework/BLC/ProofOfWork.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="33" column="10" selection-start-line="33" selection-start-column="10" selection-end-line="33" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

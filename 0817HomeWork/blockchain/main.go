@@ -1,6 +1,6 @@
 package main
 
-import "chenyuanshan/0817HomeWork/blockchain/BLC"
+import "chenyuanshan/0817Homework/blockchain/BLC"
 
 func main() {
 

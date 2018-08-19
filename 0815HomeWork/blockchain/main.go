@@ -1,7 +1,7 @@
 package main
 
 import (
-	"chenyuanshan/0815HomeWork/blockchain/BLC"
+	"chenyuanshan/0815Homework/blockchain/BLC"
 	"fmt"
 )
 
