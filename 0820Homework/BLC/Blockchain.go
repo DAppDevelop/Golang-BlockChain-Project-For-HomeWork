@@ -8,6 +8,8 @@ import (
 	"math/big"
 	"strconv"
 	"encoding/hex"
+	"crypto/ecdsa"
+	"bytes"
 )
 
 type BlockchainYS struct {
@@ -87,6 +89,17 @@ func (blockchain *BlockchainYS) MineNewBlockYS(from []string, to []string, amoun
 	for i := 0; i < len(from); i++ {
 		//转换amount为int
 		amountInt, _ := strconv.Atoi(amount[i])
+
+		//判断地址是否有效
+		if !IsValidAddressYS([]byte(from[i])) {
+			fmt.Printf("发送方%s  地址无效\n", from[i])
+			os.Exit(1)
+		}
+		if !IsValidAddressYS([]byte(to[i])) {
+			fmt.Printf("接受方%s 地址无效\n", to[i])
+			os.Exit(1)
+		}
+
 		tx := NewSimpleTransationYS(from[i], to[i], int64(amountInt), blockchain, txs)
 		//fmt.Println(tx)
 		txs = append(txs, tx)
@@ -191,14 +204,12 @@ func caculateYS(tx *TransactionYS, address string, spentTxOutputMap map[string][
 	if !tx.IsCoinBaseTransactionYS() { //tx不是CoinBase交易，遍历TxInput
 		for _, txInput := range tx.VinsYS {
 			//txInput-->TxInput
-			if txInput.UnlockWithAddressYS(address) {
+			full_payload := Base58Decode([]byte(address))
+			pubKeyHash := full_payload[1 : len(full_payload)-addressCheckSumLenYS]
+			if txInput.UnlockWithAddressYS(pubKeyHash) {
 				//txInput的解锁脚本(用户名) 如果和钥查询的余额的用户名相同，
 				key := hex.EncodeToString(txInput.TxIDYS)
 				spentTxOutputMap[key] = append(spentTxOutputMap[key], txInput.VoutYS)
-				/*
-				map[key]-->value
-				map[key] -->[]int
-				 */
 			}
 		}
 	}
@@ -343,4 +354,66 @@ func BlockchainObjectYS() *BlockchainYS {
 	})
 
 	return &BlockchainYS{tip, db}
+}
+
+
+func (bc *BlockchainYS) SignTrasanctionYS(tx *TransactionYS, privateKey ecdsa.PrivateKey, txs [] *TransactionYS) {
+	//签名：需要1,私钥，2.要签名的交易中的部分数据
+	//1.判断要签名的tx，如果时coninbase交易直接返回
+	if tx.IsCoinBaseTransactionYS() {
+		return
+	}
+
+	//2.获取该tx中的Input，引用之前的transaction中的未花费的output，
+	prevTxs := make(map[string]*TransactionYS)
+	for _, input := range tx.VinsYS {
+		txIDStr := hex.EncodeToString(input.TxIDYS)
+		prevTxs[txIDStr] = bc.FindTransactionByTxIDYS(input.TxIDYS, txs)
+	}
+
+	//3.签名
+	tx.SignYS(privateKey, prevTxs)
+}
+
+//根据交易ID，获取对应的交易
+func (bc *BlockchainYS) FindTransactionByTxIDYS(txID []byte, txs [] *TransactionYS) *TransactionYS {
+	//1.先查找未打包的txs
+	for _, tx := range txs {
+		if bytes.Compare(tx.TxIDYS, txID) == 0 {
+			return tx
+		}
+	}
+	//遍历数据库，获取blcok--->transaction
+	iterator := bc.IteratorYS()
+	for {
+		block := iterator.NextYS()
+		for _, tx := range block.TxsYS {
+			if bytes.Compare(tx.TxIDYS, txID) == 0 {
+				return tx
+			}
+		}
+
+		//判断结束循环
+		bigInt := new(big.Int)
+		bigInt.SetBytes(block.PrevBlockHashYS)
+		if big.NewInt(0).Cmp(bigInt) == 0 {
+			break
+		}
+	}
+
+	return &TransactionYS{}
+}
+
+//验证交易的数字签名
+func (bc *BlockchainYS) VerifityTransaction(tx *TransactionYS, txs []*TransactionYS) bool {
+	//要想验证数字签名：私钥+数据 (tx的副本+之前的交易)
+	//2.获取该tx中的Input，引用之前的transaction中的未花费的output
+	prevTxs := make(map[string]*TransactionYS)
+	for _, input := range tx.VinsYS {
+		txIDStr := hex.EncodeToString(input.TxIDYS)
+		prevTxs[txIDStr] = bc.FindTransactionByTxIDYS(input.TxIDYS, txs)
+	}
+
+	//验证
+	return tx.VerifityYS(prevTxs)
 }

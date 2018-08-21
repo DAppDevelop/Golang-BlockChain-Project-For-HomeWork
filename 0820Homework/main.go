@@ -1,7 +1,7 @@
 package main
 
 import (
-	"chenyuanshan/0819Homework/BLC"
+	"chenyuanshan/0820Homework/BLC"
 )
 
 func main() {
