@@ -34,6 +34,8 @@ func CreateBlockchainWithGenesisBlockYS(address string) {
 		log.Panic(err)
 	}
 
+	defer db.Close()
+
 	err = db.Update(func(tx *bolt.Tx) error {
 
 		//创建表
@@ -77,15 +79,18 @@ func CreateBlockchainWithGenesisBlockYS(address string) {
 	挖矿产生区块
 */
 func (blockchain *BlockchainYS) MineNewBlockYS(from []string, to []string, amount []string) {
-	/*
-	1.新建交易
-	2.新建区块：
-		读取数据库，获取最后一块block
-	3.存入到数据库中
-	 */
 
-	//1. 通过相关算法建立Transaction数组
+	//1. 根据from/to/amount 通过相关算法建立Transaction数组
 	var txs []*TransactionYS
+	utxoSet :=&UTXOSetYS{blockchain}
+
+	/*
+	奖励：reward：
+	创建一个CoinBase交易--->Tx 给予 第一个交易的发送者(暂定)
+	 */
+	coinBaseTransaction := NewRewardTransacionYS(from[0])
+	txs = append(txs, coinBaseTransaction)
+
 	for i := 0; i < len(from); i++ {
 		//转换amount为int
 		amountInt, _ := strconv.Atoi(amount[i])
@@ -100,10 +105,19 @@ func (blockchain *BlockchainYS) MineNewBlockYS(from []string, to []string, amoun
 			os.Exit(1)
 		}
 
-		tx := NewSimpleTransationYS(from[i], to[i], int64(amountInt), blockchain, txs)
+		tx := NewSimpleTransationYS(from[i], to[i], int64(amountInt), utxoSet, txs)
 		//fmt.Println(tx)
 		txs = append(txs, tx)
 	}
+
+	//交易的验证：
+	for _, tx := range txs {
+		if blockchain.VerifityTransaction(tx, txs) == false {
+			log.Panic("数字签名验证失败。。。")
+		}
+	}
+
+
 
 	var block *BlockYS
 	//获取最新的block
@@ -416,4 +430,85 @@ func (bc *BlockchainYS) VerifityTransaction(tx *TransactionYS, txs []*Transactio
 
 	//验证
 	return tx.VerifityYS(prevTxs)
+}
+
+
+/*	获取所有区块中的UTXO
+	map[string]*TxOutputs  交易id-->[]*UTXO (这笔交易下的UTXO集合)
+*/
+func (bc *BlockchainYS) FindUnspentUTXOMapYS() map[string]*TxOutputsYS {
+
+	iterator := bc.IteratorYS()
+
+	utxoMap := make(map[string]*TxOutputsYS)
+
+	//已花费的input map
+	spentedMp := make(map[string][]*TXInputYS)
+
+	//遍历所有block
+	for {
+		block := iterator.NextYS()
+
+		//倒序遍历block里面的TXs
+		for i := len(block.TxsYS) - 1; i >= 0; i-- {
+			//收集input
+			tx := block.TxsYS[i]//当期的TX交易
+			txIDStr := hex.EncodeToString(tx.TxIDYS) //TXID string
+
+			txOutputs := &TxOutputsYS{[]*UTXOYS{}}
+
+			//coinbase不处理Vins
+			if !tx.IsCoinBaseTransactionYS() {
+				for _, txInput := range tx.VinsYS {
+					txIDStr := hex.EncodeToString(txInput.TxIDYS)
+					spentedMp[txIDStr] = append(spentedMp[txIDStr], txInput)
+				}
+			}
+
+
+			//根据spentedMp,遍历outputs 找出 UTXO
+		outputLoop:
+			for index, txOutput := range tx.VoutsYS {
+
+
+				if len(spentedMp) > 0 {
+					//isSpent := false
+					inputs := spentedMp[txIDStr]//如果inputs 存在, 则对应的交易里面某笔output肯定已经被消费
+					for _, input := range inputs {
+						//判断input对应的是否当期的output
+						if index == input.VoutYS && input.UnlockWithAddressYS(txOutput.PubKeyHashYS) {
+							//此笔output已被消费
+							//isSpent = true
+							continue outputLoop
+						}
+					}
+
+					//if isSpent == false {
+					//outputs 加进utxoMap
+					utxo := &UTXOYS{ tx.TxIDYS, index, txOutput}
+					txOutputs.UTXOsYS = append(txOutputs.UTXOsYS, utxo)
+					//}
+				} else  {
+					//outputs 加进utxoMap
+					utxo := &UTXOYS{ tx.TxIDYS, index, txOutput}
+					txOutputs.UTXOsYS = append(txOutputs.UTXOsYS, utxo)
+				}
+			}
+
+			if len(txOutputs.UTXOsYS) > 0 {
+				utxoMap[txIDStr] = txOutputs
+			}
+
+
+		}
+
+		//退出条件
+		hashBigInt := new(big.Int)
+		hashBigInt.SetBytes(block.PrevBlockHashYS)
+		if big.NewInt(0).Cmp(hashBigInt) == 0 {
+			break
+		}
+	}
+
+	return utxoMap
 }

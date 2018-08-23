@@ -37,16 +37,36 @@ func NewCoinbaseTransacionYS(address string) *TransactionYS {
 
 }
 
+
+/*
+	产生挖矿奖励交易Transaction  奖励为1
+ */
+func NewRewardTransacionYS(address string) *TransactionYS {
+	//创建创世区块交易的Vin
+	txInput := &TXInputYS{[]byte{}, -1, nil, nil}
+	//创建创世区块交易的Vout
+	txOutput := NewTxOutputYS(1, address)
+	//生产交易Transaction
+	txCoinBaseTransaction := &TransactionYS{[]byte{}, []*TXInputYS{txInput}, []*TXOutputYS{txOutput}}
+	//设置Transaction的TxHash
+	txCoinBaseTransaction.SetIDYS()
+
+	return txCoinBaseTransaction
+
+}
+
+
 /*
 	创建普通交易Transaction
  */
-func NewSimpleTransationYS(from string, to string, amount int64, bc *BlockchainYS, txs []*TransactionYS) *TransactionYS {
+func NewSimpleTransationYS(from string, to string, amount int64, utxoSet *UTXOSetYS, txs []*TransactionYS) *TransactionYS {
 	//1.定义Input和Output的数组
 	var txInputs []*TXInputYS
 	var txOutputs []*TXOutputYS
 
 	//获取本次转账要使用output
-	total, spentableUTXO := bc.FindSpentableUTXOsYS(from, amount, txs)
+	//total, spentableUTXO := bc.FindSpentableUTXOsYS(from, amount, txs)
+	total, spentableUTXO := utxoSet.FindSpentableUTXOsYS(from, amount, txs)
 
 	//2.创建Input
 	//获取钱包的集合：
@@ -73,8 +93,7 @@ func NewSimpleTransationYS(from string, to string, amount int64, bc *BlockchainY
 	//fmt.Println(tx)
 
 	//设置签名
-	bc.SignTrasanctionYS(tx, wallet.PrivateKeyYS, txs)
-
+	utxoSet.blockChainYS.SignTrasanctionYS(tx, wallet.PrivateKeyYS, txs)
 	return tx
 }
 

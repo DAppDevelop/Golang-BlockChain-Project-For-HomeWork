@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"encoding/gob"
 	"log"
-	"crypto/sha256"
 )
 
 type BlockYS struct {
@@ -39,15 +38,16 @@ func CreateGenesisBlockYS(txs []*TransactionYS) *BlockYS {
 
 // 需要将Txs转换成[]byte(256)
 func (block *BlockYS) HashTransactionsYS() []byte {
-	var txHashes [][]byte
-	var txHash [32]byte
-
-	for _, tx := range block.TxsYS {
-		txHashes = append(txHashes, tx.TxIDYS)
+	//将txs的hash序列号为[]byte,并放进一个数组里面
+	var txs [][]byte
+	for _,tx := range block.TxsYS {
+		txBytes := tx.SerializeYS()
+		txs = append(txs, txBytes)
 	}
-	txHash = sha256.Sum256(bytes.Join(txHashes, []byte{}))
+	//生成 merkle tree
+	merkleTree := NewMerkleTreeYS(txs)
 
-	return txHash[:]
+	return merkleTree.RootNodeYS.DataHashYS
 
 }
 

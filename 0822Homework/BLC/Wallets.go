@@ -14,8 +14,6 @@ type WalletsYS struct {
 	WalletMapYS map[string]*WalletYS
 }
 
-const walletsFile = "Wallets.dat" //存储钱包数据的本地文件名
-
 //提供一个函数，用于创建一个钱包的集合
 /*
 思路：修改该方法：

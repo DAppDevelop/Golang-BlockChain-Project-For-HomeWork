@@ -55,8 +55,6 @@ func NewWalletYS() *WalletYS {
 	return &WalletYS{privateKey, publicKey}
 }
 
-const versionYS = byte(0x00)
-const addressCheckSumLenYS = 4
 
 //根据公钥获取对应的地址
 func (w *WalletYS) GetAddressYS() []byte {
@@ -69,15 +67,7 @@ func (w *WalletYS) GetAddressYS() []byte {
 	//step1：得到公钥哈希
 	pubKeyHash := PubKeyHashYS(w.PublickKeyYS)
 
-	//step2：添加版本号：
-	versioned_payload := append([]byte{versionYS}, pubKeyHash...)
-
-	//step3：根据versioned_payload-->两次sha256,取前4位，得到checkSum
-	checkSumBytes := CheckSumYS(versioned_payload)
-	//step4：拼接全部数据
-	full_payload := append(versioned_payload, checkSumBytes...)
-	//step5：Base58编码
-	address := Base58Encode(full_payload)
+	address := PublicHashToAddress(pubKeyHash)
 
 	return address
 }
@@ -127,4 +117,18 @@ func IsValidAddressYS(address []byte) bool {
 	checkSumBytes2 := CheckSumYS(version_payload)
 	//step4：比较checkSumBytes，checkSumBytes2
 	return  bytes.Compare(checkSumBytes, checkSumBytes2) == 0
+}
+
+func PublicHashToAddress(pubKeyHash []byte) []byte {
+
+	//step2：添加版本号：
+	versioned_payload := append([]byte{versionYS}, pubKeyHash...)
+	//step3：根据versioned_payload-->两次sha256,取前4位，得到checkSum
+	checkSumBytes := CheckSumYS(versioned_payload)
+	//step4：拼接全部数据
+	full_payload := append(versioned_payload, checkSumBytes...)
+	//step5：Base58编码
+	address := Base58Encode(full_payload)
+
+	return address
 }

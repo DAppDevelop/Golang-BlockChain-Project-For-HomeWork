@@ -21,6 +21,8 @@ func (cli *CLIYS) getBalanceYS(address string) {
 	}
 
 	//txs 传nil值，查询时没有新的交易产生
-	total := blockchain.GetBalanceYS(address, []*TransactionYS{})
+	//total := blockchain.GetBalanceYS(address, []*TransactionYS{})
+	utxoSet := &UTXOSetYS{blockchain}
+	total := utxoSet.GetBalanceYS(address)
 	fmt.Printf("%s的余额：%d\n", address, total)
 }

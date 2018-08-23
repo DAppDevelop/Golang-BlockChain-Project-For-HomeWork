@@ -37,5 +37,5 @@ func (tx *TXOutputYS) LockYS(address string){
 
 //格式化输出
 func (tx *TXOutputYS) String() string {
-	return fmt.Sprintf("\n\t\t\tValue: %d, PubKeyHash: %x", tx.ValueYS, tx.PubKeyHashYS)
+	return fmt.Sprintf("\n\t\t\tValue: %d, PubKeyHash(转成地址显示): %s", tx.ValueYS, PublicHashToAddress(tx.PubKeyHashYS))
 }
