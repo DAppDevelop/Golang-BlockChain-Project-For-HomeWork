@@ -40,6 +40,8 @@ func NewMerkleTreeYS(txHashDataYS [][]byte) *MerkleTreeYS {
 	//保存每层merkle Tree 节点 当节点数为1时, 跳出循环
 	var nodes []*MerkleNodeYS
 
+	merkleTree := &MerkleTreeYS{}
+
 	//创建叶子节点
 	//当txHashData 为奇数 , 最后一个复制补全
 	if len(txHashDataYS)%2 != 0 {
@@ -51,26 +53,24 @@ func NewMerkleTreeYS(txHashDataYS [][]byte) *MerkleTreeYS {
 		nodes = append(nodes, node)
 	}
 
+	iterator := merkleTree.Iterator(nodes)
+
 	//生成子节点(循环到根节点生成为止)
 	for {
-		//每次循环新建一个newNodes 保存此层node的数组
-		var newNodes []*MerkleNodeYS
-
-		for i := 0; i < len(nodes); i += 2 {
-			node := &MerkleNodeYS{nodes[i], nodes[i+1], nil}
-			newNodes = append(newNodes, node)
-		}
-
-		//设置新的nodes
-		nodes = newNodes
+		newNodes := iterator.Next()
 
 		//判断当前层node的数量是否为1, 为1则为根节点
 		if len(newNodes) == 1 {
-			break
+			merkleTree.RootNodeYS = newNodes[0]
+			//fmt.Printf("newNodes[0].DataHashYS: %x\n", merkleTree.RootNodeYS.DataHashYS)
+			return merkleTree
 		}
 	}
 
-	merkleTree := &MerkleTreeYS{nodes[0]}
+	return &MerkleTreeYS{}
 
-	return merkleTree
+}
+
+func (mt *MerkleTreeYS)Iterator(nodes []*MerkleNodeYS) *MerkleTreeIteratorYS {
+	return &MerkleTreeIteratorYS{nodes}
 }

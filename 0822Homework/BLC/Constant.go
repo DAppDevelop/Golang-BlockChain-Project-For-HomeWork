@@ -4,7 +4,7 @@ const targetBitYS = 8              // 挖矿难度(256位Hash里面前面至少�
 const DBNameYS = "blockchainYS.db" // 数据库名字
 const BlockBucketNameYS = "blocks" // 表的名字
 const UTXOSetBucketNameYS = "utxoset"
-const walletsFile = "Wallets.dat" //存储钱包数据的本地文件名
+const walletsFileYS = "Wallets.dat" //存储钱包数据的本地文件名
 
 
 //钱包

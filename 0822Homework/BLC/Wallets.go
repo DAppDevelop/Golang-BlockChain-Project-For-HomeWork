@@ -23,14 +23,14 @@ type WalletsYS struct {
 
 func NewWalletsYS() *WalletsYS {
 	//step1：钱包文件不存在
-	if _, err := os.Stat(walletsFile); os.IsNotExist(err) {
+	if _, err := os.Stat(walletsFileYS); os.IsNotExist(err) {
 		fmt.Println("钱包文件不存在。。。")
 		wallets := &WalletsYS{}
 		wallets.WalletMapYS = make(map[string]*WalletYS)
 		return wallets
 	}
 
-	wsBytes, err := ioutil.ReadFile(walletsFile)
+	wsBytes, err := ioutil.ReadFile(walletsFileYS)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -72,7 +72,7 @@ func (ws *WalletsYS) saveFileYS () {
 
 	wsBytes := buf.Bytes()
 
-	err = ioutil.WriteFile(walletsFile, wsBytes, 0644)
+	err = ioutil.WriteFile(walletsFileYS, wsBytes, 0644)
 	if err != nil {
 		log.Panic(err)
 	}
