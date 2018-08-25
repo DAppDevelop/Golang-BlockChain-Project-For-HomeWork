@@ -23,5 +23,5 @@ func (txInput *TXInputYS) UnlockWithAddressYS(pubKeyHash []byte) bool {
 
 //格式化输出
 func (tx *TXInputYS) String() string {
-	return fmt.Sprintf("\n\t\t\tTxInput_TXID: %x, Vout: %v, Signature: %x, PublicKey:%x", tx.TxID, tx.Vout, tx.Signature, tx.PublicKey)
+	return fmt.Sprintf("\n\t\t\tTxInput_TXID: %x, Vout: %v, Signature: %x, PublicKey:%x", tx.TxIDYS, tx.VoutYS, tx.SignatureYS, tx.PublicKeyYS)
 }

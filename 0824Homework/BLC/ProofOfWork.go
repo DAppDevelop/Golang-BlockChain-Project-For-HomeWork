@@ -19,7 +19,7 @@ func NewProofOfWorkYS(block *BlockYS) *ProofOfWorkYS {
 	target := big.NewInt(1)
 
 	//2. 左移 256 - targetBit
-	target = target.Lsh(target, 256-targetBit)
+	target = target.Lsh(target, 256-targetBitYS)
 
 	return &ProofOfWorkYS{block, target}
 }

@@ -15,11 +15,11 @@ type TransactionPoolYS struct {
 
 
 func NewTXPoolYS(nodeID string) *TransactionPoolYS {
-	txPollFile := fmt.Sprintf(txPollFile,nodeID)
+	txPollFile := fmt.Sprintf(txPollFileYS,nodeID)
 	//step1：钱包文件不存在
 	if _, err := os.Stat(txPollFile); os.IsNotExist(err) {
 		fmt.Println("交易池不存在。。。创建交易池")
-		txp := &TransactionPoolYS{[]*Transaction{}}
+		txp := &TransactionPoolYS{[]*TransactionYS{}}
 		return txp
 	}
 
@@ -43,7 +43,7 @@ func NewTXPoolYS(nodeID string) *TransactionPoolYS {
 
 func (txp *TransactionPoolYS) saveFileYS (nodeID string) {
 	//组合文件名
-	txPollFile := fmt.Sprintf(txPollFile,nodeID)
+	txPollFile := fmt.Sprintf(txPollFileYS,nodeID)
 	//将序列化后的ws对象存入文件
 
 	txpBytes := gobEncode(txp)

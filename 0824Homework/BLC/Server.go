@@ -24,7 +24,7 @@ func startServerYS(nodeID string, mineAddress string) {
 
 	defer listener.Close()
 
-	bc := BlockchainObject(nodeID)
+	bc := BlockchainObjectYS(nodeID)
 	//defer bc.DB.Close()
 
 	//判断是否为主节点, 非主节点的节点需要向主节点发送Version消息
@@ -43,7 +43,7 @@ func startServerYS(nodeID string, mineAddress string) {
 
 		fmt.Println("发送方已接入..", conn.RemoteAddr())
 
-		go handleConnection(conn, bc)
+		go handleConnectionYS(conn, bc)
 	}
 }
 
@@ -56,26 +56,26 @@ func handleConnectionYS(conn net.Conn, bc *BlockchainYS) {
 		log.Panic(err)
 	}
 
-	command := bytesToCommand(request[:COMMAND_LENGTH])
+	command := bytesToCommand(request[:COMMAND_LENGTHYS])
 
 	fmt.Printf("接收到的命令是：%s\n", command)
 
 	switch command {
-	case COMMAND_VERSION:
+	case COMMAND_VERSIONYS:
 		handleVersionYS(request, bc)
-	case COMMAND_GETBLOCKS:
+	case COMMAND_GETBLOCKSYS:
 		handleGetBlocksHashYS(request, bc)
-	case COMMAND_INV:
+	case COMMAND_INVYS:
 		handleInvYS(request, bc)
-	case COMMAND_GETDATA:
+	case COMMAND_GETDATAYS:
 		handleGetDataYS(request, bc)
-	case COMMAND_BLOCKDATA:
+	case COMMAND_BLOCKDATAYS:
 		handleGetBlockDataYS(request, bc)
-	case COMMAND_TXS:
+	case COMMAND_TXSYS:
 		handleTransactionsYS(request, bc)
-	case COMMAND_REQUIREMINE:
+	case COMMAND_REQUIREMINEYS:
 		handleRequireMineYS(request, bc)
-	case COMMAND_VERIFYBLOCK:
+	case COMMAND_VERIFYBLOCKYS:
 		handleVerifyBlockYS(request, bc)
 	default:
 		fmt.Println("无法识别....")

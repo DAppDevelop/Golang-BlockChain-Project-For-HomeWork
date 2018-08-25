@@ -17,7 +17,7 @@ import (
 func handleVersionYS(request []byte, bc *BlockchainYS) {
 
 	//1.从request中获取版本的数据：[]byte
-	commandBytes := request[COMMAND_LENGTH:]
+	commandBytes := request[COMMAND_LENGTHYS:]
 
 	//2.反序列化--->version
 	var version VersionYS
@@ -50,10 +50,10 @@ func handleVersionYS(request []byte, bc *BlockchainYS) {
  */
 func handleGetBlocksHashYS(request []byte, bc *BlockchainYS) {
 	//1.从request中获取版本的数据：[]byte
-	commandBytes := request[COMMAND_LENGTH:]
+	commandBytes := request[COMMAND_LENGTHYS:]
 
 	//2.反序列化--->version
-	var getblocks GetBlocks
+	var getblocks GetBlocksYS
 
 	decoder := gob.NewDecoder(bytes.NewReader(commandBytes))
 
@@ -64,7 +64,7 @@ func handleGetBlocksHashYS(request []byte, bc *BlockchainYS) {
 
 	blocksHashes := bc.getBlocksHashesYS()
 
-	sendInvYS(getblocks.AddrFrom, BLOCK_TYPE, blocksHashes)
+	sendInvYS(getblocks.AddrFromYS, BLOCK_TYPEYS, blocksHashes)
 }
 
 /*
@@ -74,7 +74,7 @@ func handleGetBlocksHashYS(request []byte, bc *BlockchainYS) {
  */
 func handleInvYS(request []byte, bc *BlockchainYS) {
 	//1.从request中获取版本的数据：[]byte
-	commandBytes := request[COMMAND_LENGTH:]
+	commandBytes := request[COMMAND_LENGTHYS:]
 
 	//2.反序列化--->version
 	var inv InvYS
@@ -86,27 +86,27 @@ func handleInvYS(request []byte, bc *BlockchainYS) {
 		log.Panic(err)
 	}
 
-	if inv.TypeYS == BLOCK_TYPE {
+	if inv.TypeYS == BLOCK_TYPEYS {
 		//获取hashes中第一个hash,请求对方返回此hash对应的block
 		hash := inv.ItemsYS[0]
-		sendGetDataYS(inv.AddrFromYS, BLOCK_TYPE, hash)
+		sendGetDataYS(inv.AddrFromYS, BLOCK_TYPEYS, hash)
 
 		//保存items剩余未请求的hashes到变量blockArray(handleBlockData 方法会用到)
 		if len(inv.ItemsYS) > 0 {
 			blockArrayYS = inv.ItemsYS[1:]
 		}
 
-	} else if inv.TypeYS == TX_TYPE {
+	} else if inv.TypeYS == TX_TYPEYS {
 
 	}
 }
 
 func handleGetDataYS(request []byte, bc *BlockchainYS) {
 	//1.从request中获取版本的数据：[]byte
-	commandBytes := request[COMMAND_LENGTH:]
+	commandBytes := request[COMMAND_LENGTHYS:]
 
 	//2.反序列化--->version
-	var getData GetData
+	var getData GetDataYS
 
 	decoder := gob.NewDecoder(bytes.NewReader(commandBytes))
 
@@ -115,20 +115,20 @@ func handleGetDataYS(request []byte, bc *BlockchainYS) {
 		log.Panic(err)
 	}
 
-	if getData.Type == BLOCK_TYPE {
-		block := bc.GetBlockByHashYS(getData.Hash)
-		sendBlockYS(getData.AddrFrom, block)
-	} else if getData.Type == TX_TYPE {
+	if getData.TypeYS == BLOCK_TYPEYS {
+		block := bc.GetBlockByHashYS(getData.HashYS)
+		sendBlockYS(getData.AddrFromYS, block)
+	} else if getData.TypeYS == TX_TYPEYS {
 
 	}
 }
 
 func handleGetBlockDataYS(request []byte, bc *BlockchainYS) {
 	//1.从request中获取版本的数据：[]byte
-	commandBytes := request[COMMAND_LENGTH:]
+	commandBytes := request[COMMAND_LENGTHYS:]
 
 	//2.反序列化--->version
-	var getBlockData BlockData
+	var getBlockData BlockDataYS
 
 	decoder := gob.NewDecoder(bytes.NewReader(commandBytes))
 
@@ -137,7 +137,7 @@ func handleGetBlockDataYS(request []byte, bc *BlockchainYS) {
 		log.Panic(err)
 	}
 
-	blockBytes := getBlockData.Block
+	blockBytes := getBlockData.BlockYS
 	//block := DeserializeBlock(blockBytes)
 	var block BlockYS
 	gobDecode(blockBytes, &block)
@@ -152,7 +152,7 @@ func handleGetBlockDataYS(request []byte, bc *BlockchainYS) {
 
 	if len(blockArrayYS) > 0 {
 		hash := blockArrayYS[0]
-		sendGetDataYS(getBlockData.AddrFrom, BLOCK_TYPE, hash)
+		sendGetDataYS(getBlockData.AddrFromYS, BLOCK_TYPEYS, hash)
 		blockArrayYS = blockArrayYS[1:]
 	}
 
@@ -163,7 +163,7 @@ func handleGetBlockDataYS(request []byte, bc *BlockchainYS) {
  */
 func handleTransactionsYS(request []byte, bc *BlockchainYS) {
 	//1.从request中获取版本的数据：[]byte
-	commandBytes := request[COMMAND_LENGTH:]
+	commandBytes := request[COMMAND_LENGTHYS:]
 
 	//2.反序列化--->version
 	var txs []*TransactionYS
@@ -186,7 +186,7 @@ func handleTransactionsYS(request []byte, bc *BlockchainYS) {
 
 func handleRequireMineYS(request []byte, bc *BlockchainYS) {
 	//1.从request中获取版本的数据：[]byte
-	commandBytes := request[COMMAND_LENGTH:]
+	commandBytes := request[COMMAND_LENGTHYS:]
 	//fmt.Println("反序列化得到的txbytes：")
 	//fmt.Printf("%x",commandBytes)
 	//fmt.Println("-----")
@@ -219,7 +219,7 @@ func handleRequireMineYS(request []byte, bc *BlockchainYS) {
 		//开始挖矿
 		fmt.Println("开始挖矿")
 
-		blockchain := BlockchainObject(nodeID)
+		blockchain := BlockchainObjectYS(nodeID)
 
 		//取出要打包的交易
 		//packageTx := txp.Txs[:packageNum]
@@ -234,7 +234,7 @@ func handleRequireMineYS(request []byte, bc *BlockchainYS) {
 
 func handleVerifyBlockYS(request []byte, blockchain *BlockchainYS) {
 	//1.从request中获取版本的数据：[]byte
-	commandBytes := request[COMMAND_LENGTH:]
+	commandBytes := request[COMMAND_LENGTHYS:]
 
 	//2.反序列化--->version
 	var block *BlockYS
@@ -246,8 +246,8 @@ func handleVerifyBlockYS(request []byte, blockchain *BlockchainYS) {
 		log.Panic(err)
 	}
 
-	pow := NewProofOfWork(block)
-	if pow.IsValid() {
+	pow := NewProofOfWorkYS(block)
+	if pow.IsValidYS() {
 		blockchain.SaveNewBlockToBlockchainYS(block)
 		utxoSet := &UTXOSetYS{blockchain}
 		utxoSet.UpdateYS()

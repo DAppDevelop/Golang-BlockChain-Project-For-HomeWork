@@ -203,7 +203,7 @@ func (blc *BlockchainYS) UnSpentYS(address string, txs []*TransactionYS) []*UTXO
 
 	//第一部分：先查询本次转账，已经产生了的Transanction
 	for i := len(txs) - 1; i >= 0; i-- {
-		unSpentUTXOs = caculate(txs[i], address, spentTxOutputMap, unSpentUTXOs)
+		unSpentUTXOs = caculateYS(txs[i], address, spentTxOutputMap, unSpentUTXOs)
 	}
 
 	for utxo := range unSpentUTXOs {
@@ -219,7 +219,7 @@ func (blc *BlockchainYS) UnSpentYS(address string, txs []*TransactionYS) []*UTXO
 		//2、遍历block的Txs
 		//倒序遍历Transactions
 		for i := len(block.TxsYS) - 1; i >= 0; i-- {
-			unSpentUTXOs = caculate(block.TxsYS[i], address, spentTxOutputMap, unSpentUTXOs)
+			unSpentUTXOs = caculateYS(block.TxsYS[i], address, spentTxOutputMap, unSpentUTXOs)
 		}
 
 		//3、判断退出
@@ -642,7 +642,7 @@ func (bc *BlockchainYS) GetBlockByHashYS(hash []byte) *BlockYS {
 /*
 	添加一个block到blockChain里面
  */
-func (bc *BlockchainYS) AddBlock(block *BlockYS) {
+func (bc *BlockchainYS) AddBlockYS(block *BlockYS) {
 	DBName := fmt.Sprintf(DBNameYS, os.Getenv("NODE_ID"))
 	db, err := bolt.Open(DBName, 0600, nil)
 	if err != nil {

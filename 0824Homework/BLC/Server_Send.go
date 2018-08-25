@@ -32,9 +32,9 @@ func sendDataYS(to string, data []byte) {
 func sendVersionYS(to string, bc *BlockchainYS) {
 	//1.创建对象
 	bestHeight := bc.GetBestHeightYS()//获取当前节点区块链高度
-	version := &VersionYS{NODE_VERSION, bestHeight, nodeAddressYS}
+	version := &VersionYS{NODE_VERSIONYS, bestHeight, nodeAddressYS}
 
-	sendCommandDataYS(COMMAND_VERSION, version, to)
+	sendCommandDataYS(COMMAND_VERSIONYS, version, to)
 }
 
 /*
@@ -42,9 +42,9 @@ func sendVersionYS(to string, bc *BlockchainYS) {
  */
 func sendGetBlocksHashYS(to string) {
 	//1.创建对象
-	getBlocks := GetBlocks{nodeAddressYS}
+	getBlocks := GetBlocksYS{nodeAddressYS}
 
-	sendCommandDataYS(COMMAND_GETBLOCKS, getBlocks, to)
+	sendCommandDataYS(COMMAND_GETBLOCKSYS, getBlocks, to)
 }
 
 /*
@@ -52,9 +52,9 @@ func sendGetBlocksHashYS(to string) {
  */
 func sendInvYS(to string, kind string, data [][]byte) {
 	//1.创建对象
-	inv := Inv{nodeAddressYS, kind, data}
+	inv := InvYS{nodeAddressYS, kind, data}
 
-	sendCommandDataYS(COMMAND_INV, inv, to)
+	sendCommandDataYS(COMMAND_INVYS, inv, to)
 }
 
 /*
@@ -62,9 +62,9 @@ func sendInvYS(to string, kind string, data [][]byte) {
  */
 func sendGetDataYS(to string, kind string, hash []byte) {
 	//1.创建对象
-	getData := GetData{nodeAddressYS, kind, hash}
+	getData := GetDataYS{nodeAddressYS, kind, hash}
 
-	sendCommandDataYS(COMMAND_GETDATA, getData, to)
+	sendCommandDataYS(COMMAND_GETDATAYS, getData, to)
 }
 
 /*
@@ -72,24 +72,24 @@ func sendGetDataYS(to string, kind string, hash []byte) {
  */
 func sendBlockYS(to string, block *BlockYS) {
 	//1.创建对象
-	blockData := BlockData{nodeAddressYS, gobEncode(block)}
+	blockData := BlockDataYS{nodeAddressYS, gobEncode(block)}
 
-	sendCommandDataYS(COMMAND_BLOCKDATA, blockData, to)
+	sendCommandDataYS(COMMAND_BLOCKDATAYS, blockData, to)
 }
 
 /*
 	发送交易信息到主节点
  */
 func sendTransactionToMainNodeYS(to string, txs []*TransactionYS)  {
-	sendCommandDataYS(COMMAND_TXS, txs, to)
+	sendCommandDataYS(COMMAND_TXSYS, txs, to)
 }
 
 func sendTransactionToMinerYS(to string, txs []*TransactionYS)  {
-	sendCommandDataYS(COMMAND_REQUIREMINE, txs, to)
+	sendCommandDataYS(COMMAND_REQUIREMINEYS, txs, to)
 }
 
 func sendNewBlockToMainYS(to string, block *BlockYS) {
-	sendCommandDataYS(COMMAND_VERIFYBLOCK, block, to)
+	sendCommandDataYS(COMMAND_VERIFYBLOCKYS, block, to)
 }
 
 

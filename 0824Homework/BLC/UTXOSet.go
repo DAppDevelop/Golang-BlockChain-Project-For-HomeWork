@@ -69,7 +69,7 @@ func (utxoSet *UTXOSetYS) GetBalanceYS(address string) int64 {
 	utxos := utxoSet.FindUnspentUTXOsByAddressYS(address)
 
 	for _, utxo := range utxos {
-		total += utxo.OutputYSYS.Value
+		total += utxo.OutputYS.ValueYS
 	}
 
 	return total
@@ -133,7 +133,7 @@ func (utxoSet *UTXOSetYS) FindSpentableUTXOsYS(from string, amount int64, txs []
 	}
 
 	for _, utxo := range unPacketUTXO {
-		total += utxo.OutputYS.Value
+		total += utxo.OutputYS.ValueYS
 		txIDStr := hex.EncodeToString(utxo.TxIDYS)
 		spentableUTXOMap[txIDStr] = append(spentableUTXOMap[txIDStr], utxo.IndexYS)
 
@@ -149,7 +149,7 @@ func (utxoSet *UTXOSetYS) FindSpentableUTXOsYS(from string, amount int64, txs []
 	for _, utxo := range packedUTXO {
 		total += utxo.OutputYS.ValueYS
 		txIDStr := hex.EncodeToString(utxo.TxIDYS)
-		spentableUTXOMap[txIDStr] = append(spentableUTXOMap[txIDStr], utxo.Index)
+		spentableUTXOMap[txIDStr] = append(spentableUTXOMap[txIDStr], utxo.IndexYS)
 
 		if total >= amount {
 			return total, spentableUTXOMap
@@ -167,7 +167,7 @@ func (utxoSet *UTXOSetYS) FindSpentableUTXOsYS(from string, amount int64, txs []
 /*
 	查找对应地址,未打包的UTXO
  */
-func (utxoSet *UTXOSetYS) FindUnpacketUTXO(from string, txs []*TransactionYS) []*UTXOYS {
+func (utxoSet *UTXOSetYS) FindUnpacketUTXOYS(from string, txs []*TransactionYS) []*UTXOYS {
 
 	//存储未花费的TxOutput
 	var utxos [] *UTXOYS
@@ -186,7 +186,7 @@ func (utxoSet *UTXOSetYS) FindUnpacketUTXO(from string, txs []*TransactionYS) []
 /*
 	更新数据库UTXO
  */
-func (utxoSet *UTXOSetYS) Update() {
+func (utxoSet *UTXOSetYS) UpdateYS() {
 	//对最后一个区块进行处理
 	lastBlock := utxoSet.blockChainYS.IteratorYS().NextYS()
 

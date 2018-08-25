@@ -15,7 +15,7 @@ type TXOutputYS struct {
 func (txOutput *TXOutputYS) UnlockWithAddressYS(address string) bool{
 	full_payload:=Base58Decode([]byte(address))
 
-	pubKeyHash:=full_payload[1:len(full_payload)-addressCheckSumLen]
+	pubKeyHash:=full_payload[1:len(full_payload)-addressCheckSumLenYS]
 
 	return bytes.Compare(pubKeyHash,txOutput.PubKeyHashYS) == 0
 }
@@ -31,11 +31,11 @@ func NewTxOutputYS(value int64,address string) *TXOutputYS{
 func (tx *TXOutputYS) LockYS(address string){
 	full_payload := Base58Decode([]byte(address))
 	//获取公钥hash
-	tx.PubKeyHashYS = full_payload[1:len(full_payload)-addressCheckSumLen]
+	tx.PubKeyHashYS = full_payload[1:len(full_payload)-addressCheckSumLenYS]
 }
 
 //格式化输出
 func (tx *TXOutputYS) String() string {
-	return fmt.Sprintf("\n\t\t\tValue: %d, PubKeyHash(转成地址显示): %s", tx.Value, PublicHashToAddress(tx.PubKeyHash))
+	return fmt.Sprintf("\n\t\t\tValue: %d, PubKeyHash(转成地址显示): %s", tx.ValueYS, PublicHashToAddressYS(tx.PubKeyHashYS))
 	//return fmt.Sprintf("\n\t\t\tValue: %d, PubKeyHash: %x", tx.Value, tx.PubKeyHash)
 }
