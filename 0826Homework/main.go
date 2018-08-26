@@ -6,9 +6,12 @@ import (
 	"math/rand"
 	"flag"
 	"net"
-	"strconv"
 	"strings"
 	"net/http"
+	"encoding/json"
+	"log"
+	"os"
+	"strconv"
 )
 
 /*
@@ -18,7 +21,6 @@ import (
 	2，自己测试etcd的局域网分布式部署（不用交
  */
 
-
 const (
 	LEADER    = iota
 	CANDIDATE
@@ -27,9 +29,9 @@ const (
 
 //声明地址信息
 type Addr struct {
-	Host string //ip
-	Port int
-	Addr string
+	//Host string //ip
+	//Port int
+	Addr string //节点地址 host：port
 }
 
 type RaftServer struct {
@@ -40,8 +42,8 @@ type RaftServer struct {
 	Timeout       int       //选举间隔时间（也叫超时时间）
 	ElecChan      chan bool //通道信号
 	HeartBeatChan chan bool //leader 的心跳信号
-	Port          int       //端口号
-
+	//Port          int       //端口号
+	Address       string	//地址
 	//网页接收到的参数 由主节点向子节点传参
 	CusMsg chan string
 }
@@ -67,7 +69,7 @@ func (rs *RaftServer) resetTimeout() {
 //运行服务器
 func (rs *RaftServer) Run() {
 	//rs监听 是否有人 给我投票
-	listen, _ := net.Listen("tcp", ":"+strconv.Itoa(rs.Port))
+	listen, _ := net.Listen("tcp", rs.Address)
 
 	defer listen.Close()
 
@@ -98,13 +100,13 @@ func (rs *RaftServer) Run() {
 					fmt.Println("收到消息", value)
 				}
 
-				v, _ := strconv.Atoi(value)
-				if v == rs.Port {
+				//v, _ := strconv.Atoi(value)
+				if value == rs.Address {
 					rs.Votes++
 					fmt.Println("当前票数：", rs.Votes)
 					// leader 选举成功
 					if VoteSuccess(rs.Votes, 5) == true {
-						fmt.Printf("我是 %v, 我被选举成leader", rs.Port)
+						fmt.Printf("我是 %s, 我被选举成leader", rs.Address)
 
 						//通知其他节点。停止选举
 						//重置其他节点状态和票数
@@ -144,13 +146,9 @@ func VoteSuccess(vote int, target int) bool {
 func (rs *RaftServer) VoteToOther(data string) {
 	//这里遍历所有节点，如果某个节点没有响应，就会进入死循环直到全部非自己的节点连接上
 	for _, k := range rs.Nodes {
-		if k.Port != rs.Port {
-			if data == "1234" {
-				fmt.Println("-------------", k.Port)
-			}
-
+		if k.Addr != rs.Address {
 		label:
-			conn, err := net.Dial("tcp", ":"+strconv.Itoa(k.Port))
+			conn, err := net.Dial("tcp", k.Addr)
 			for {
 				if err != nil {
 					time.Sleep(1 * time.Second)
@@ -173,9 +171,9 @@ func (rs *RaftServer) elect() {
 		<-rs.ElecChan
 
 		//给其他节点投票，不能投给自己
-		vote := getVoteNum()
+		vote := rs.getVoteNum()
 
-		rs.VoteToOther(strconv.Itoa(vote))
+		rs.VoteToOther(vote)
 		// 设置选举状态
 		if rs.Role != LEADER {
 			rs.changeRole(CANDIDATE)
@@ -188,10 +186,12 @@ func (rs *RaftServer) elect() {
 }
 
 //随机生成投票给的端口号
-func getVoteNum() int {
+func (rs *RaftServer)getVoteNum() string {
 
 	rand.Seed(time.Now().UnixNano())
-	return rand.Intn(3) + 5000
+	i :=  rand.Intn(len(rs.Nodes))
+
+	return rs.Nodes[i].Addr
 }
 
 func (rs *RaftServer) electTimeDuration() {
@@ -212,7 +212,7 @@ func (rs *RaftServer) electTimeDuration() {
 func (rs *RaftServer) printRole() {
 	for {
 		time.Sleep(1 * time.Second)
-		fmt.Println(rs.Port, "状态为", rs.Role, rs.isElecting)
+		fmt.Println(rs.Address, "状态为", rs.Role, rs.isElecting)
 	}
 }
 
@@ -220,9 +220,37 @@ func main() {
 
 	//获取参数
 	//运行  go run main.go -p 5000  (p 后面就是要启动的端口)
-	port := flag.Int("go", 1234, "port")
-	flag.Parse()
-	fmt.Println(*port)
+	//port := flag.Int("go", 1234, "port")
+	//flag.Parse()
+	//fmt.Println(*port)
+
+	setNodeCmd := flag.NewFlagSet("node", flag.ExitOnError)
+
+	nameFrom := setNodeCmd.String("name", "", "节点名称")
+	addressesFrom := setNodeCmd.String("addrs", "", "已知地址s")
+
+	//设置一个参数 传入已知节点的Addr
+
+	setNodeCmd.Parse(os.Args[2:])
+
+	var addr2 []string
+	if setNodeCmd.Parsed() {
+		fmt.Println("nameFrom:", *nameFrom)
+		fmt.Println("address:", *addressesFrom)
+		addr2 = JSONToArray(*addressesFrom)
+		//fmt.Println(addr2)
+	} else {
+		fmt.Println("没解析参数")
+	}
+
+	var addresses []Addr
+	for _, ad := range addr2 {
+		//fmt.Println(ad)
+		address := Addr{ad}
+		addresses = append(addresses, address)
+	}
+
+	fmt.Println(addresses)
 
 	rs := RaftServer{}
 	rs.isElecting = true
@@ -233,16 +261,21 @@ func main() {
 	rs.HeartBeatChan = make(chan bool)
 	rs.CusMsg = make(chan string)
 	rs.resetTimeout()
-	rs.Nodes = []Addr{
-		{"127.0.0.1", 5000, "5000"},
-		{"127.0.0.1", 5001, "5001"},
-		{"127.0.0.1", 5002, "5002"},
-		//{"127.0.0.1", 5003, "5003"},
-	}
-	rs.Port = *port
+	rs.Nodes = addresses
+	rs.Address = *nameFrom
+
+	//rs.Nodes = []Addr{
+	//	//windows :192.168.0.106
+	//	//mac :192.168.0.100
+	//	{"192.168.0.106", 5000, "5000"},
+	//	{"127.0.0.1", 5001, "5001"},
+	//	{"127.0.0.1", 5002, "5002"},
+	//	//{"127.0.0.1", 5003, "5003"},
+	//}
+	//rs.Port = *port
+
 
 	rs.Run()
-
 
 }
 
@@ -275,8 +308,17 @@ func (rs *RaftServer) setHttpServer() {
 
 	//http:localhost:5010/req?data=123456
 	http.HandleFunc("/req", rs.request)
-	httpPort := rs.Port + 10
-	if err := http.ListenAndServe(":"+strconv.Itoa(httpPort), nil); err == nil {
+	//httpPort := rs.Port + 10
+	array := strings.Split(rs.Address, ":")
+	host := array[0]
+	port := array[1]
+	fmt.Println("host:", host, "port:", port)
+	portInt, _ := strconv.Atoi(port)
+	portInt = portInt +10
+	port = strconv.Itoa(portInt)
+	finalAddr := host+":"+port
+	fmt.Println("finalAddr:", finalAddr)
+	if err := http.ListenAndServe(finalAddr, nil); err == nil {
 		fmt.Println(err)
 	}
 
@@ -293,4 +335,15 @@ func (rs *RaftServer) request(writer http.ResponseWriter, request *http.Request)
 		rs.CusMsg <- request.Form["data"][0]
 	}
 
+}
+
+// 标准的JSON字符串转数组
+func JSONToArray(jsonString string) []string {
+
+	//json 到 []string
+	var sArr []string
+	if err := json.Unmarshal([]byte(jsonString), &sArr); err != nil {
+		log.Panic(err)
+	}
+	return sArr
 }
